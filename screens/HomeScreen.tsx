@@ -14,7 +14,7 @@ export const HomeScreen = ({ route, navigation }) => {
   };
 
   const checkUserId = async () => {
-    const retrievedUser = await getUserById(userId);
+    const retrievedUser: object = await getUserById(userId);
     if (!retrievedUser) {
       handleSignOut();
     }
@@ -27,7 +27,7 @@ export const HomeScreen = ({ route, navigation }) => {
 
   return (
     <SafeAreaView>
-      <Text>Home Screen</Text>
+      <Text style={styles.mainText}>Home Screen</Text>
       <Text>{user?.username}</Text>
       <Button title='Sign Out' onPress={() => handleSignOut()} />
     </SafeAreaView>
@@ -40,5 +40,17 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#fff',
     justifyContent: 'center',
+  },
+  mainText: {
+    marginTop: 34,
+    margin: 24,
+    fontSize: 18,
+    fontWeight: 'bold',
+    textAlign: 'center',
+  },
+  secondaryText: {
+    margin: 24,
+    fontSize: 14,
+    textAlign: 'center',
   },
 });

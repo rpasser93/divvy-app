@@ -1,4 +1,3 @@
-import { StatusBar } from 'expo-status-bar';
 import {
   Button,
   SafeAreaView,
@@ -6,14 +5,31 @@ import {
   Text,
   TextInput,
 } from 'react-native';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { attemptLogin } from '../data/users/attempt-login';
 import { saveUserIdToStorage } from '../helpers/save-user-id-to-storage';
+import { getUserIdFromStorage } from '../helpers/get-user-id-from-storage';
+import { getUserById } from '../data/users/get-user-by-id';
 
 export const LoginScreen = ({ navigation }) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [errorText, setErrorText] = useState('');
+
+  const checkStorageForUserId = async () => {
+    const storedUserId: string = await getUserIdFromStorage();
+    if (!storedUserId) {
+      return;
+    }
+
+    const registeredUser: object = getUserById(storedUserId);
+    if (!registeredUser) {
+      return;
+    }
+
+    navigation.navigate('HomeTabs', { userId: storedUserId });
+    return;
+  };
 
   const handleChangeUsername = (text: string) => {
     setErrorText('');
@@ -26,19 +42,23 @@ export const LoginScreen = ({ navigation }) => {
   };
 
   const handleLoginAttempt = async () => {
-    const loggedInUserId = await attemptLogin(username, password);
+    const loggedInUserId: string = await attemptLogin(username, password);
 
     if (loggedInUserId) {
       saveUserIdToStorage(loggedInUserId);
-      navigation.navigate('Home', { userId: loggedInUserId });
+      navigation.navigate('HomeTabs', { userId: loggedInUserId });
       return;
     }
     setErrorText('Invalid login credentials.');
   };
 
+  useEffect(() => {
+    checkStorageForUserId();
+  }, []);
+
   return (
     <SafeAreaView style={styles.container}>
-      <Text style={styles.maintext}>Log In:</Text>
+      <Text style={styles.mainText}>Login Screen:</Text>
       <TextInput
         style={styles.textInput}
         placeholder={'Username'}
@@ -51,10 +71,17 @@ export const LoginScreen = ({ navigation }) => {
         onChangeText={(text) => handleChangePassword(text)}
         onFocus={() => setErrorText('')}
       />
-      <Button title='Log in' onPress={() => handleLoginAttempt()} />
-      <Text style={styles.maintext}>{errorText}</Text>
-      <StatusBar style='auto' />
-      <Button title={'Sign Up'} onPress={() => navigation.navigate('Signup')} />
+      <Button title='Log In' onPress={() => handleLoginAttempt()} />
+      <Text style={styles.mainText}>{errorText}</Text>
+      <Text style={styles.secondaryText}>
+        Don't have an account?{' '}
+        <Text
+          style={styles.linkText}
+          onPress={() => navigation.navigate('Signup')}
+        >
+          Sign Up
+        </Text>
+      </Text>
     </SafeAreaView>
   );
 };
@@ -65,11 +92,16 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#fff',
   },
-  maintext: {
+  mainText: {
     marginTop: 34,
     margin: 24,
     fontSize: 18,
     fontWeight: 'bold',
+    textAlign: 'center',
+  },
+  secondaryText: {
+    margin: 24,
+    fontSize: 14,
     textAlign: 'center',
   },
   textInput: {
@@ -79,5 +111,12 @@ const styles = StyleSheet.create({
     padding: 10,
     margin: 4,
     borderRadius: 20,
+  },
+  linkText: {
+    margin: 24,
+    fontSize: 14,
+    textAlign: 'center',
+    color: '#0000ff',
+    textDecorationLine: 'underline',
   },
 });

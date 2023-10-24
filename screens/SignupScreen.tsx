@@ -25,11 +25,11 @@ export const SignupScreen = ({ navigation }) => {
   };
 
   const handleSignUpAttempt = async () => {
-    const newUserId = await createNewAccount(username, password);
+    const newUserId: string = await createNewAccount(username, password);
 
     if (newUserId) {
       saveUserIdToStorage(newUserId);
-      navigation.navigate('Home', { userId: newUserId });
+      navigation.navigate('HomeTabs', { userId: newUserId });
       return;
     }
     setErrorText('Invalid username.');
@@ -37,7 +37,7 @@ export const SignupScreen = ({ navigation }) => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <Text style={styles.maintext}>Sign Up:</Text>
+      <Text style={styles.mainText}>Signup Screen:</Text>
       <TextInput
         style={styles.textInput}
         placeholder={'Username'}
@@ -51,8 +51,16 @@ export const SignupScreen = ({ navigation }) => {
         onFocus={() => setErrorText('')}
       />
       <Button title='Sign Up' onPress={() => handleSignUpAttempt()} />
-      <Text style={styles.maintext}>{errorText}</Text>
-      <Button title={'Log in'} onPress={() => navigation.navigate('Login')} />
+      <Text style={styles.mainText}>{errorText}</Text>
+      <Text style={styles.secondaryText}>
+        Already have an account?{' '}
+        <Text
+          style={styles.linkText}
+          onPress={() => navigation.navigate('Login')}
+        >
+          Log In
+        </Text>
+      </Text>
     </SafeAreaView>
   );
 };
@@ -63,7 +71,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#fff',
   },
-  maintext: {
+  mainText: {
     marginTop: 34,
     margin: 24,
     fontSize: 18,
@@ -77,5 +85,17 @@ const styles = StyleSheet.create({
     padding: 10,
     margin: 4,
     borderRadius: 20,
+  },
+  secondaryText: {
+    margin: 24,
+    fontSize: 14,
+    textAlign: 'center',
+  },
+  linkText: {
+    margin: 24,
+    fontSize: 14,
+    textAlign: 'center',
+    color: '#0000ff',
+    textDecorationLine: 'underline',
   },
 });
