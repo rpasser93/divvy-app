@@ -6,18 +6,23 @@ import { SignupScreen } from './screens/SignupScreen';
 import { HomeScreen } from './screens/HomeScreen';
 import { AccountScreen } from './screens/AccountScreen';
 import { AddExpenseScreen } from './screens/AddExpenseScreen';
+import { useEffect, useState } from 'react';
+import { getUserById } from './data/users/get-user-by-id';
+import { saveUserIdToStorage } from './helpers/save-user-id-to-storage';
+import { ActivityIndicator, View } from 'react-native';
+import { getUserIdFromStorage } from './helpers/get-user-id-from-storage';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 
 const HomeTabScreen = ({route}) => {
-  const { userId } = route.params;
+  const { user } = route.params;
 
-  return(
+  return (
     <Tab.Navigator initialRouteName={"Home"} screenOptions={{headerShown: false}}>
-      <Tab.Screen name="Account" component={AccountScreen}></Tab.Screen>
-      <Tab.Screen name="Home" component={HomeScreen} initialParams={{userId: userId}} />
-      <Tab.Screen name="Add Expense" component={AddExpenseScreen}></Tab.Screen>
+      <Tab.Screen name="Account" component={AccountScreen} initialParams={{user: user}}></Tab.Screen>
+      <Tab.Screen name="Home" component={HomeScreen} initialParams={{user: user}} />
+      <Tab.Screen name="Add Expense" component={AddExpenseScreen} initialParams={{user: user}}></Tab.Screen>
     </Tab.Navigator>
   );
 }
@@ -25,7 +30,7 @@ const HomeTabScreen = ({route}) => {
 export default App = () => {
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="Login" screenOptions={{headerShown: false}}>
+      <Stack.Navigator initialRouteName={"Login"} screenOptions={{headerShown: false}}>
         <Stack.Screen name="Login" component={LoginScreen} />
         <Stack.Screen name="Signup" component={SignupScreen} />
         <Stack.Screen name="HomeTabs" component={HomeTabScreen} />

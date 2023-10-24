@@ -5,9 +5,19 @@ export const getUserById = async (id: string) => {
     const response = await axios.get(
       `${process.env.EXPO_PUBLIC_API_BASE_URL}/users/${id}`
     );
-    return response.data;
+
+    const successObject: object = {
+      success: true,
+      data: response.data,
+    };
+    return successObject;
   } catch (error) {
     console.log(error.response.data);
-    return null;
+
+    const failureObject: object = {
+      success: false,
+      errorMessage: error.response.data,
+    };
+    return failureObject;
   }
 };

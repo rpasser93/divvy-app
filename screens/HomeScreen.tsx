@@ -1,34 +1,19 @@
-import { useEffect, useState } from 'react';
 import { Button, SafeAreaView, StyleSheet, Text } from 'react-native';
-import { getUserById } from '../data/users/get-user-by-id';
 import { saveUserIdToStorage } from '../helpers/save-user-id-to-storage';
 
 export const HomeScreen = ({ route, navigation }) => {
-  const { userId } = route.params;
-  const [user, setUser] = useState(null);
+  const { user } = route.params;
 
-  const handleSignOut = () => {
-    saveUserIdToStorage('');
+  const handleSignOut = async () => {
+    await saveUserIdToStorage('');
     navigation.navigate('Login');
     return;
   };
 
-  const checkUserId = async () => {
-    const retrievedUser: object = await getUserById(userId);
-    if (!retrievedUser) {
-      handleSignOut();
-    }
-    setUser(retrievedUser);
-  };
-
-  useEffect(() => {
-    checkUserId();
-  }, []);
-
   return (
     <SafeAreaView>
-      <Text style={styles.mainText}>Home Screen</Text>
-      <Text>{user?.username}</Text>
+      <Text style={styles.mainText}>Active Expenses:</Text>
+      <Text>{user.username}</Text>
       <Button title='Sign Out' onPress={() => handleSignOut()} />
     </SafeAreaView>
   );

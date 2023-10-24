@@ -1,9 +1,11 @@
 import {
+  ActivityIndicator,
   Button,
   SafeAreaView,
   StyleSheet,
   Text,
   TextInput,
+  View,
 } from 'react-native';
 import { useEffect, useState } from 'react';
 import { attemptLogin } from '../data/users/attempt-login';
@@ -15,19 +17,24 @@ export const LoginScreen = ({ navigation }) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [errorText, setErrorText] = useState('');
+  const [loading, setLoading] = useState(true);
 
   const checkStorageForUserId = async () => {
-    const storedUserId: string = await getUserIdFromStorage();
+    const storedUserId = await getUserIdFromStorage();
     if (!storedUserId) {
+      setLoading(false);
       return;
     }
 
-    const registeredUser: object = getUserById(storedUserId);
-    if (!registeredUser) {
+    const registeredUser = await getUserById(storedUserId);
+    if (!registeredUser['success']) {
+      await saveUserIdToStorage('');
+      setLoading(false);
       return;
     }
 
-    navigation.navigate('HomeTabs', { userId: storedUserId });
+    navigation.navigate('HomeTabs', { user: registeredUser['data'] });
+    setLoading(false);
     return;
   };
 
@@ -42,21 +49,26 @@ export const LoginScreen = ({ navigation }) => {
   };
 
   const handleLoginAttempt = async () => {
-    const loggedInUserId: string = await attemptLogin(username, password);
+    const loggedInUser: object = await attemptLogin(username, password);
 
-    if (loggedInUserId) {
-      saveUserIdToStorage(loggedInUserId);
-      navigation.navigate('HomeTabs', { userId: loggedInUserId });
+    if (loggedInUser['success']) {
+      const loggedInUserId = loggedInUser['data']['_id']['$oid'].toString();
+      await saveUserIdToStorage(loggedInUserId);
+      navigation.navigate('HomeTabs', { user: loggedInUser['data'] });
       return;
     }
-    setErrorText('Invalid login credentials.');
+    setErrorText(loggedInUser['errorText'] ?? 'Invalid credentials.');
   };
 
   useEffect(() => {
     checkStorageForUserId();
   }, []);
 
-  return (
+  return loading ? (
+    <View>
+      <ActivityIndicator style={styles.spinner} />
+    </View>
+  ) : (
     <SafeAreaView style={styles.container}>
       <Text style={styles.mainText}>Login Screen:</Text>
       <TextInput
@@ -118,5 +130,9 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     color: '#0000ff',
     textDecorationLine: 'underline',
+  },
+  spinner: {
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });

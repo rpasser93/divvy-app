@@ -1,9 +1,11 @@
 import { SafeAreaView, StyleSheet, Text } from 'react-native';
 
-export const AddExpenseScreen = ({ route, navigation }) => {
+export const AddExpenseScreen = ({ route }) => {
+  const { user } = route.params;
+
   return (
     <SafeAreaView>
-      <Text style={styles.mainText}>Add Expense Screen</Text>
+      <Text style={styles.mainText}>Add New Expense</Text>
     </SafeAreaView>
   );
 };

@@ -9,9 +9,19 @@ export const createNewAccount = async (username: String, password: String) => {
         password: password,
       }
     );
-    return response.data['_id']['$oid'].toString();
+
+    const successObject: object = {
+      success: true,
+      data: response.data,
+    };
+    return successObject;
   } catch (error) {
     console.log(error.response.data);
-    return null;
+
+    const failureObject: object = {
+      success: false,
+      errorMessage: error.response.data,
+    };
+    return failureObject;
   }
 };
