@@ -80,6 +80,7 @@ export const LoginScreen = ({ navigation }) => {
       <TextInput
         style={styles.textInput}
         placeholder={'Password'}
+        secureTextEntry={true}
         onChangeText={(text) => handleChangePassword(text)}
         onFocus={() => setErrorText('')}
       />

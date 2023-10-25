@@ -54,16 +54,7 @@ export const AccountScreen = ({ route, navigation }) => {
       <View>
         <Text style={styles.mainText}>Account Settings</Text>
         <Text style={styles.secondaryText}>Username:</Text>
-        <View style={styles.row}>
-          <View>
-            <Text style={styles.secondaryTextBold}>{user.username}</Text>
-          </View>
-          <View style={styles.editButton}>
-            <TouchableOpacity onPress={() => console.log('editing')}>
-              <FontAwesome name='pencil-square-o' size={16} color={'black'} />
-            </TouchableOpacity>
-          </View>
-        </View>
+        <Text style={styles.secondaryTextBold}>{user.username}</Text>
         <Text style={styles.secondaryText}>Full Name:</Text>
         <View style={styles.row}>
           <View>

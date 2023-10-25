@@ -4,6 +4,7 @@ import {
   SafeAreaView,
   StyleSheet,
   Text,
+  TouchableOpacity,
   View,
 } from 'react-native';
 import { saveUserIdToStorage } from '../helpers/save-user-id-to-storage';
@@ -39,13 +40,42 @@ export const HomeScreen = ({ route, navigation }) => {
     }, [])
   );
 
+  const renderActiveExpenses = () => {
+    const expenses = user.expenses;
+
+    return expenses
+      ? expenses.map((expense, index) => {
+          return (
+            <View key={index}>
+              <TouchableOpacity
+                style={styles.expense}
+                onPress={() => console.log('opening expense')}
+              >
+                <Text>Expense {index + 1}</Text>
+                <Text>{expense.id}</Text>
+              </TouchableOpacity>
+            </View>
+          );
+        })
+      : null;
+  };
+
   return loading ? (
     <View>
       <ActivityIndicator />
     </View>
   ) : (
     <SafeAreaView style={styles.container}>
-      <Text style={styles.mainText}>Active Expenses:</Text>
+      <View>
+        <Text style={styles.mainText}>Home</Text>
+        <Text style={styles.expensesTitleText}>Your Active Expenses:</Text>
+        {renderActiveExpenses()}
+      </View>
+      <View style={styles.bottomContainer}>
+        <TouchableOpacity>
+          <Text>View Archived Expenses</Text>
+        </TouchableOpacity>
+      </View>
     </SafeAreaView>
   );
 };
@@ -55,6 +85,7 @@ const styles = StyleSheet.create({
     padding: 10,
     flex: 1,
     backgroundColor: '#fff',
+    justifyContent: 'space-between',
   },
   mainText: {
     marginTop: 34,
@@ -66,5 +97,24 @@ const styles = StyleSheet.create({
   secondaryText: {
     fontSize: 14,
     textAlign: 'center',
+  },
+  expensesTitleText: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    textAlign: 'center',
+  },
+  expense: {
+    alignItems: 'center',
+    alignSelf: 'center',
+    borderRadius: 2,
+    elevation: 3,
+    borderColor: 'black',
+    borderWidth: 1,
+    width: 250,
+    margin: 8,
+  },
+  bottomContainer: {
+    marginBottom: 24,
+    alignItems: 'center',
   },
 });
