@@ -44,7 +44,7 @@ export const HomeScreen = ({ route, navigation }) => {
       <ActivityIndicator />
     </View>
   ) : (
-    <SafeAreaView>
+    <SafeAreaView style={styles.container}>
       <Text style={styles.mainText}>Active Expenses:</Text>
     </SafeAreaView>
   );
@@ -55,7 +55,6 @@ const styles = StyleSheet.create({
     padding: 10,
     flex: 1,
     backgroundColor: '#fff',
-    justifyContent: 'center',
   },
   mainText: {
     marginTop: 34,
