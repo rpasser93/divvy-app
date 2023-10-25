@@ -18,8 +18,8 @@ export const AccountScreen = ({ route, navigation }) => {
   const [loading, setLoading] = useState(true);
 
   const fullName: string =
-    user && user['first_name'] && user['last_name']
-      ? `${user['first_name']} ${user['last_name']}`
+    user && user.first_name && user.last_name
+      ? `${user.first_name} ${user.last_name}`
       : '---';
 
   const handleSignOut = async () => {
@@ -31,10 +31,10 @@ export const AccountScreen = ({ route, navigation }) => {
   const retrieveUser = async () => {
     setLoading(true);
     const retrievedUser = await getUserById(userId);
-    if (!retrievedUser['success']) {
+    if (!retrievedUser.success) {
       handleSignOut();
     }
-    setUser(retrievedUser['data']);
+    setUser(retrievedUser.data);
     setLoading(false);
     return;
   };
@@ -56,7 +56,7 @@ export const AccountScreen = ({ route, navigation }) => {
         <Text style={styles.secondaryText}>Username:</Text>
         <View style={styles.row}>
           <View>
-            <Text style={styles.secondaryTextBold}>{user['username']}</Text>
+            <Text style={styles.secondaryTextBold}>{user.username}</Text>
           </View>
           <View style={styles.editButton}>
             <TouchableOpacity onPress={() => console.log('editing')}>

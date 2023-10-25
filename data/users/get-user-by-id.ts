@@ -6,7 +6,7 @@ export const getUserById = async (id: string) => {
       `${process.env.EXPO_PUBLIC_API_BASE_URL}/users/${id}`
     );
 
-    const successObject: object = {
+    const successObject = {
       success: true,
       data: response.data,
     };
@@ -14,9 +14,9 @@ export const getUserById = async (id: string) => {
   } catch (error) {
     console.log(error.response.data);
 
-    const failureObject: object = {
+    const failureObject = {
       success: false,
-      errorMessage: error.response.data,
+      data: error.response.data,
     };
     return failureObject;
   }

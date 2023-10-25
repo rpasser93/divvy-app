@@ -27,13 +27,13 @@ export const LoginScreen = ({ navigation }) => {
     }
 
     const registeredUser = await getUserById(storedUserId);
-    if (!registeredUser['success']) {
+    if (!registeredUser.success) {
       await saveUserIdToStorage('');
       setLoading(false);
       return;
     }
 
-    navigation.navigate('HomeTabs', { user: registeredUser['data'] });
+    navigation.navigate('HomeTabs', { user: registeredUser.data });
     setLoading(false);
     return;
   };
@@ -49,15 +49,15 @@ export const LoginScreen = ({ navigation }) => {
   };
 
   const handleLoginAttempt = async () => {
-    const loggedInUser: object = await attemptLogin(username, password);
+    const loggedInUser = await attemptLogin(username, password);
 
-    if (loggedInUser['success']) {
-      const loggedInUserId = loggedInUser['data']['_id']['$oid'].toString();
+    if (loggedInUser.success) {
+      const loggedInUserId = loggedInUser.data._id['$oid'].toString();
       await saveUserIdToStorage(loggedInUserId);
-      navigation.navigate('HomeTabs', { user: loggedInUser['data'] });
+      navigation.navigate('HomeTabs', { user: loggedInUser.data });
       return;
     }
-    setErrorText(loggedInUser['errorText'] ?? 'Invalid credentials.');
+    setErrorText(loggedInUser.data ?? 'Invalid credentials.');
   };
 
   useEffect(() => {

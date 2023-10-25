@@ -10,7 +10,7 @@ export const createNewAccount = async (username: String, password: String) => {
       }
     );
 
-    const successObject: object = {
+    const successObject = {
       success: true,
       data: response.data,
     };
@@ -18,9 +18,9 @@ export const createNewAccount = async (username: String, password: String) => {
   } catch (error) {
     console.log(error.response.data);
 
-    const failureObject: object = {
+    const failureObject = {
       success: false,
-      errorMessage: error.response.data,
+      data: error.response.data,
     };
     return failureObject;
   }

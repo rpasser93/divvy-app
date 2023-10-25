@@ -12,7 +12,7 @@ const Tab = createBottomTabNavigator();
 
 const HomeTabScreen = ({route}) => {
   const { user } = route.params;
-  const userId = user['_id']['$oid'];
+  const userId = user._id['$oid'];
 
   return (
     <Tab.Navigator initialRouteName={"Home"} screenOptions={{headerShown: false}}>

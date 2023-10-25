@@ -25,15 +25,15 @@ export const SignupScreen = ({ navigation }) => {
   };
 
   const handleSignUpAttempt = async () => {
-    const newUser: object = await createNewAccount(username, password);
+    const newUser = await createNewAccount(username, password);
 
-    if (newUser['success']) {
-      const newUserId = newUser['data']['_id']['$oid'].toString();
+    if (newUser.success) {
+      const newUserId = newUser.data._id['$oid'].toString();
       await saveUserIdToStorage(newUserId);
-      navigation.navigate('HomeTabs', { user: newUser['data'] });
+      navigation.navigate('HomeTabs', { user: newUser.data });
       return;
     }
-    setErrorText(newUser['errorText'] ?? 'Invalid username.');
+    setErrorText(newUser.data ?? 'Invalid username.');
   };
 
   return (

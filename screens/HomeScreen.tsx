@@ -25,10 +25,10 @@ export const HomeScreen = ({ route, navigation }) => {
   const retrieveUser = async () => {
     setLoading(true);
     const retrievedUser = await getUserById(userId);
-    if (!retrievedUser['success']) {
+    if (!retrievedUser.success) {
       handleSignOut();
     }
-    setUser(retrievedUser['data']);
+    setUser(retrievedUser.data);
     setLoading(false);
     return;
   };
