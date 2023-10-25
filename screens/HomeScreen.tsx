@@ -1,8 +1,20 @@
-import { Button, SafeAreaView, StyleSheet, Text } from 'react-native';
+import {
+  ActivityIndicator,
+  Button,
+  SafeAreaView,
+  StyleSheet,
+  Text,
+  View,
+} from 'react-native';
 import { saveUserIdToStorage } from '../helpers/save-user-id-to-storage';
+import React, { useEffect, useState } from 'react';
+import { getUserById } from '../data/users/get-user-by-id';
+import { useFocusEffect } from '@react-navigation/native';
 
 export const HomeScreen = ({ route, navigation }) => {
-  const { user } = route.params;
+  const { userId } = route.params;
+  const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   const handleSignOut = async () => {
     await saveUserIdToStorage('');
@@ -10,11 +22,30 @@ export const HomeScreen = ({ route, navigation }) => {
     return;
   };
 
-  return (
+  const retrieveUser = async () => {
+    setLoading(true);
+    const retrievedUser = await getUserById(userId);
+    if (!retrievedUser['success']) {
+      handleSignOut();
+    }
+    setUser(retrievedUser['data']);
+    setLoading(false);
+    return;
+  };
+
+  useFocusEffect(
+    React.useCallback(() => {
+      retrieveUser();
+    }, [])
+  );
+
+  return loading ? (
+    <View>
+      <ActivityIndicator />
+    </View>
+  ) : (
     <SafeAreaView>
       <Text style={styles.mainText}>Active Expenses:</Text>
-      <Text>{user.username}</Text>
-      <Button title='Sign Out' onPress={() => handleSignOut()} />
     </SafeAreaView>
   );
 };
@@ -34,7 +65,6 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   secondaryText: {
-    margin: 24,
     fontSize: 14,
     textAlign: 'center',
   },
