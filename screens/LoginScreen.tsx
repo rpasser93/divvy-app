@@ -6,6 +6,7 @@ import {
   Text,
   TextInput,
   View,
+  Image,
 } from 'react-native';
 import { useEffect, useState } from 'react';
 import { attemptLogin } from '../data/users/attempt-login';
@@ -71,6 +72,7 @@ export const LoginScreen = ({ navigation }) => {
   ) : (
     <SafeAreaView style={styles.container}>
       <Text style={styles.mainText}>Login Screen:</Text>
+      <Image style={styles.logo} source={require('../assets/divvylogo.png')} />
       <TextInput
         style={styles.textInput}
         placeholder={'Username'}
@@ -104,6 +106,12 @@ const styles = StyleSheet.create({
     padding: 10,
     flex: 1,
     backgroundColor: '#fff',
+  },
+  logo: {
+    width: 250,
+    height: undefined,
+    aspectRatio: 1132 / 824,
+    alignSelf: 'center',
   },
   mainText: {
     marginTop: 34,

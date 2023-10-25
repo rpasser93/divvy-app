@@ -5,6 +5,7 @@ import {
   StyleSheet,
   Text,
   TextInput,
+  Image,
 } from 'react-native';
 import { createNewAccount } from '../data/users/create-new-account';
 import { saveUserIdToStorage } from '../helpers/save-user-id-to-storage';
@@ -39,6 +40,7 @@ export const SignupScreen = ({ navigation }) => {
   return (
     <SafeAreaView style={styles.container}>
       <Text style={styles.mainText}>Signup Screen:</Text>
+      <Image style={styles.logo} source={require('../assets/divvylogo.png')} />
       <TextInput
         style={styles.textInput}
         placeholder={'Username'}
@@ -72,6 +74,12 @@ const styles = StyleSheet.create({
     padding: 10,
     flex: 1,
     backgroundColor: '#fff',
+  },
+  logo: {
+    width: 250,
+    height: undefined,
+    aspectRatio: 1132 / 824,
+    alignSelf: 'center',
   },
   mainText: {
     marginTop: 34,
