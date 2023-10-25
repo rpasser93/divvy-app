@@ -72,7 +72,7 @@ export const LoginScreen = ({ navigation }) => {
   ) : (
     <SafeAreaView style={styles.container}>
       <Text style={styles.mainText}>Login Screen:</Text>
-      <Image style={styles.logo} source={require('../assets/divvylogo.png')} />
+      <Image style={styles.logo} source={require('../assets/divvylogo2.png')} />
       <TextInput
         style={styles.textInput}
         placeholder={'Username'}

@@ -40,7 +40,7 @@ export const SignupScreen = ({ navigation }) => {
   return (
     <SafeAreaView style={styles.container}>
       <Text style={styles.mainText}>Signup Screen:</Text>
-      <Image style={styles.logo} source={require('../assets/divvylogo.png')} />
+      <Image style={styles.logo} source={require('../assets/divvylogo2.png')} />
       <TextInput
         style={styles.textInput}
         placeholder={'Username'}
