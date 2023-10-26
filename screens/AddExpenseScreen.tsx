@@ -1,7 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import {
   ActivityIndicator,
   SafeAreaView,
+  ScrollView,
   StyleSheet,
   Text,
   TextInput,
@@ -18,6 +19,7 @@ import { useFocusEffect } from '@react-navigation/native';
 export const AddExpenseScreen = ({ route, navigation }) => {
   const { userId } = route.params;
   const [user, setUser] = useState(null);
+  const scrollViewRef = useRef(null);
   const [firstSectionDone, setFirstSectionDone] = useState(false);
   const [secondSectionDone, setSecondSectionDone] = useState(false);
   const [thirdSectionDone, setThirdSectionDone] = useState(false);
@@ -84,7 +86,7 @@ export const AddExpenseScreen = ({ route, navigation }) => {
     );
 
     if (newExpense.success) {
-      navigation.navigate('Home');
+      navigation.navigate('Dashboard');
       return;
     }
   };
@@ -133,6 +135,29 @@ export const AddExpenseScreen = ({ route, navigation }) => {
         </View>
       );
     });
+  };
+
+  const dateInput = () => {
+    return expenseName && expenseAmount ? (
+      <View style={styles.rowLeft}>
+        <Text style={styles.secondaryText}>When: </Text>
+        {expenseDate ? (
+          <TouchableOpacity
+            style={styles.dateButton}
+            onPress={() => handleDatePicker()}
+          >
+            <Text style={styles.secondaryTextBold}>{expenseDate}</Text>
+          </TouchableOpacity>
+        ) : (
+          <TouchableOpacity
+            style={styles.calendarButton}
+            onPress={() => handleDatePicker()}
+          >
+            <FontAwesome name='calendar' size={20} color={'black'} />
+          </TouchableOpacity>
+        )}
+      </View>
+    ) : null;
   };
 
   const secondSection = () => {
@@ -187,55 +212,57 @@ export const AddExpenseScreen = ({ route, navigation }) => {
     </View>
   ) : (
     <SafeAreaView style={styles.container}>
-      <View>
-        <Text style={styles.mainText}>Add New Expense</Text>
-        <View style={styles.inputContainer}>
-          <TextInput
-            style={styles.textInput}
-            placeholder={'Enter a name for the expense'}
-            onChangeText={(text) => setExpenseName(text)}
-          />
-          <View style={styles.row}>
-            <Text style={styles.dollarSign}>$</Text>
+      <ScrollView
+        ref={scrollViewRef}
+        onContentSizeChange={() => {
+          scrollViewRef.current?.scrollToEnd({ animated: true });
+        }}
+      >
+        <View>
+          <Text style={styles.mainText}>Add New Expense</Text>
+          <View style={styles.inputContainer}>
             <TextInput
-              style={styles.amountInput}
-              placeholder={'0.00'}
-              onChangeText={(text) => setExpenseAmount(text)}
+              style={styles.textInput}
+              placeholder={'Enter a name for the expense'}
+              onChangeText={(text) => setExpenseName(text)}
             />
+            <View style={styles.row}>
+              <Text style={styles.dollarSign}>$</Text>
+              <TextInput
+                style={styles.amountInput}
+                placeholder={'0.00'}
+                onChangeText={(text) => setExpenseAmount(text)}
+              />
+            </View>
+            {dateInput()}
           </View>
-          <View style={styles.rowLeft}>
-            <Text style={styles.secondaryText}>When: </Text>
-            {expenseDate ? (
-              <TouchableOpacity
-                style={styles.dateButton}
-                onPress={() => handleDatePicker()}
-              >
-                <Text style={styles.secondaryTextBold}>{expenseDate}</Text>
-              </TouchableOpacity>
-            ) : (
-              <TouchableOpacity
-                style={styles.calendarButton}
-                onPress={() => handleDatePicker()}
-              >
-                <FontAwesome name='calendar' size={20} color={'black'} />
-              </TouchableOpacity>
-            )}
+          {secondSection()}
+          {thirdSection()}
+          {fourthSection()}
+        </View>
+        {thirdSectionDone ? (
+          <View style={styles.bottomContainer}>
+            <TouchableOpacity
+              style={styles.bottomButtons}
+              onPress={() => console.log('breakdown')}
+            >
+              <Text style={styles.secondaryText}>View Breakdown</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.bottomButtons}
+              onPress={() => console.log('notes')}
+            >
+              <Text style={styles.secondaryText}>Add Notes</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.saveExpense}
+              onPress={() => handleSaveExpense()}
+            >
+              <Text style={styles.saveText}>Save Expense</Text>
+            </TouchableOpacity>
           </View>
-        </View>
-        {secondSection()}
-        {thirdSection()}
-        {fourthSection()}
-      </View>
-      {thirdSectionDone ? (
-        <View style={styles.bottomContainer}>
-          <TouchableOpacity
-            style={styles.saveExpense}
-            onPress={() => handleSaveExpense()}
-          >
-            <Text style={styles.saveText}>Save Expense</Text>
-          </TouchableOpacity>
-        </View>
-      ) : null}
+        ) : null}
+      </ScrollView>
     </SafeAreaView>
   );
 };
@@ -360,7 +387,16 @@ const styles = StyleSheet.create({
     marginBottom: 24,
     alignItems: 'center',
   },
+  bottomButtons: {
+    elevation: 3,
+    borderColor: 'black',
+    padding: 4,
+    marginBottom: 8,
+    marginLeft: 8,
+    alignSelf: 'flex-start',
+  },
   saveExpense: {
+    alignSelf: 'center',
     alignItems: 'center',
     justifyContent: 'center',
     borderRadius: 2,

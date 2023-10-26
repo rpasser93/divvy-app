@@ -49,7 +49,11 @@ export const HomeScreen = ({ route, navigation }) => {
             <View key={index}>
               <TouchableOpacity
                 style={styles.expense}
-                onPress={() => console.log('opening expense')}
+                onPress={() => {
+                  navigation.navigate('ExpenseDetails', {
+                    expenseId: expense.id,
+                  });
+                }}
               >
                 <Text>Expense {index + 1}</Text>
                 <Text>{expense.id}</Text>
