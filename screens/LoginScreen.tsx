@@ -39,16 +39,6 @@ export const LoginScreen = ({ navigation }) => {
     return;
   };
 
-  const handleChangeUsername = (text: string) => {
-    setErrorText('');
-    setUsername(text);
-  };
-
-  const handleChangePassword = (text: string) => {
-    setErrorText('');
-    setPassword(text);
-  };
-
   const handleLoginAttempt = async () => {
     const loggedInUser = await attemptLogin(username, password);
 
@@ -76,14 +66,20 @@ export const LoginScreen = ({ navigation }) => {
       <TextInput
         style={styles.textInput}
         placeholder={'Username'}
-        onChangeText={(text) => handleChangeUsername(text)}
+        onChangeText={(text) => {
+          setErrorText('');
+          setUsername(text);
+        }}
         onFocus={() => setErrorText('')}
       />
       <TextInput
         style={styles.textInput}
         placeholder={'Password'}
         secureTextEntry={true}
-        onChangeText={(text) => handleChangePassword(text)}
+        onChangeText={(text) => {
+          setErrorText('');
+          setPassword(text);
+        }}
         onFocus={() => setErrorText('')}
       />
       <Button title='Log In' onPress={() => handleLoginAttempt()} />

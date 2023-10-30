@@ -7,6 +7,7 @@ import { HomeScreen } from './screens/HomeScreen';
 import { AccountScreen } from './screens/AccountScreen';
 import { AddExpenseScreen } from './screens/AddExpenseScreen';
 import { ExpenseDetailsScreen } from './screens/ExpenseDetailsScreen';
+import { ExpenseHistoryScreen } from './screens/ExpenseHistoryScreen';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -18,6 +19,7 @@ const HomeStack = ({route}) => {
     <Stack.Navigator initialRouteName={"Dashboard"} screenOptions={{headerShown: false}}>
       <Stack.Screen name="Dashboard" component={HomeScreen} initialParams={{userId: userId}}/>
       <Stack.Screen name="ExpenseDetails" component={ExpenseDetailsScreen} />
+      <Stack.Screen name="ExpenseHistory" component={ExpenseHistoryScreen} />
     </Stack.Navigator>
   )
 }

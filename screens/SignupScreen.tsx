@@ -15,16 +15,6 @@ export const SignupScreen = ({ navigation }) => {
   const [password, setPassword] = useState('');
   const [errorText, setErrorText] = useState('');
 
-  const handleChangeUsername = (text: string) => {
-    setErrorText('');
-    setUsername(text);
-  };
-
-  const handleChangePassword = (text: string) => {
-    setErrorText('');
-    setPassword(text);
-  };
-
   const handleSignUpAttempt = async () => {
     const newUser = await createNewAccount(username, password);
 
@@ -44,14 +34,20 @@ export const SignupScreen = ({ navigation }) => {
       <TextInput
         style={styles.textInput}
         placeholder={'Username'}
-        onChangeText={(text) => handleChangeUsername(text)}
+        onChangeText={(text) => {
+          setErrorText('');
+          setUsername(text);
+        }}
         onFocus={() => setErrorText('')}
       />
       <TextInput
         style={styles.textInput}
         placeholder={'Password'}
         secureTextEntry={true}
-        onChangeText={(text) => handleChangePassword(text)}
+        onChangeText={(text) => {
+          setErrorText('');
+          setPassword(text);
+        }}
         onFocus={() => setErrorText('')}
       />
       <Button title='Sign Up' onPress={() => handleSignUpAttempt()} />
